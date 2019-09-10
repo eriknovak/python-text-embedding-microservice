@@ -110,9 +110,9 @@ can be changed.
 ```bash
 python -m microservice.execute production \
     -H localhost \
-    -p 4000 \
-    -mp ./data/embeddings/wiki.sl.align.vec \
-    -ml sl
+    -p 4001 \
+    -mp ./data/embeddings/wiki.en.align.vec \
+    -ml en
 ```
 
 ### Running different services
