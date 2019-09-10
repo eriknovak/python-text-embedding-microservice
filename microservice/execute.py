@@ -25,7 +25,7 @@ if __name__=='__main__':
         # create the application
         app = create_app(args=args)
         # run the application
-
         app.run(host=args.host, port=args.port)
+
     else:
         raise Exception('Argument command is unknown: {}'.format(args.command))

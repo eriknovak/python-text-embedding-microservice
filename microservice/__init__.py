@@ -2,8 +2,6 @@
 # Retrieves, configures and connects all of the
 # components of the microservice
 
-import argparse
-
 import os
 
 from flask import Flask
@@ -32,9 +30,14 @@ def create_app(args=None):
         app.config.from_object(config.TestingConfig)
 
     # setup the cors configurations
-    if app.config['CORS']['origins']:
+    if 'CORS' in app.config and 'origins' in app.config['CORS']:
         CORS(app, origins=app.config['CORS']['origins'])
 
+    # add error handlers
+    from .routes.general import error_handlers
+    error_handlers.register(app)
+
+    # create context: components are using app.config
     with app.app_context():
         # add logger configuration
         config_logging.init_app(app)
@@ -42,10 +45,6 @@ def create_app(args=None):
         # add document query routes
         from .routes.embeddings import embeddings
         app.register_blueprint(embeddings.bp)
-
-    # add error handlers
-    from .routes.general import error_handlers
-    error_handlers.register(app)
 
     # TODO: log start of the service
     # return the app

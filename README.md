@@ -9,8 +9,6 @@ Service for producing document representations via word embeddings.
 
     To test that your python version is correct, run `python --version` in the command line
 
-- postgres 9.6 or higher (or other database framework)
-
 ## Install
 
 To install the project run
@@ -90,6 +88,14 @@ To run the service in production mode, one must first change some parameters.
 export FLASK_ENV=production
 ```
 
+```bash
+python -m microservice.execute production \
+    -H localhost \
+    -p 4001 \
+    -mp ./data/embeddings/wiki.en.align.vec \
+    -ml en
+```
+
 #### Windows
 
 For Windows cmd, use `set` instead of `export`:
@@ -107,12 +113,9 @@ $env:FLASK_ENV="production"
 Afterwards run the following command from the root of the project. The parameters
 can be changed.
 
-```bash
-python -m microservice.execute production \
-    -H localhost \
-    -p 4001 \
-    -mp ./data/embeddings/wiki.en.align.vec \
-    -ml en
+
+```cmd
+python -m microservice.execute production -H localhost -p 4001 -mp ./data/embeddings/wiki.en.align.vec -ml en
 ```
 
 ### Running different services
