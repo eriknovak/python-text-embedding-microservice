@@ -1,7 +1,8 @@
 # Data
-
 This folder contains the required data for the system to run.
 
-## Word Embedding Models
-These models are required for calculating the document embeddings. Each model is associated with it's own language,
-for which a mapping is required.
+## Word Embeddings
+The `embeddings` folder contains the word embedding models.
+
+## Language Stopwords
+The `stopwords` folder contains the stopword lists of different languages.

@@ -30,8 +30,8 @@ def configure_timed_rotating_log(path, name="microservice"):
 
     Args:
         path (str): The path to the log file.
-        name (str): The name of the logger. (Default "microservice")
-        level (obj): The primary level of the logger. (Default "INFO")
+        name (str): The name of the logger. (Default = "microservice")
+        level (obj): The primary level of the logger. (Default = "INFO")
 
     Returns:
         obj: the logger object.

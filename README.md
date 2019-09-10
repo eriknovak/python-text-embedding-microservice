@@ -54,8 +54,12 @@ Development mode shows an interactive debugger whenever a page raises an excepti
 and restarts the server whenever you make changes to the code.
 One can leave it running and just reload the browser page as one does changes to the service.
 
-To run the service:
+#### Prerequisites
+Check the [configuration](./microservice/config/) folder to see what needs to be set before running the microservice
+in development mode.
 
+
+To run the service:
 ```bash
 # the python -m enables auto-reload on file changes
 python -m flask run
@@ -100,8 +104,18 @@ For Windows PowerShell, use `$env:` instead of `export`:
 $env:FLASK_ENV="production"
 ```
 
-Afterwards run the following command from the root of the project.
+Afterwards run the following command from the root of the project. The parameters
+can be changed.
 
 ```bash
-python -m microservice.__init__
+python -m microservice.execute production \
+    -H localhost \
+    -p 4000 \
+    -mp ./data/embeddings/wiki.sl.align.vec \
+    -ml sl
 ```
+
+### Running different services
+
+To run the same service on different models just change the `-p`, `-mp` and `-ml`
+command line parameters and run the code.

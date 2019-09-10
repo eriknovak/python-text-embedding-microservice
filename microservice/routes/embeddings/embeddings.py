@@ -1,21 +1,28 @@
-# Bundles Search Routes
-# Routes related to searching for OER bundles
+# Embedding Route
+# Routes related to creatiung text embeddings
 
-import functools
+import sys
 
 from flask import (
-    Blueprint, flash, g, redirect, request, session, url_for, jsonify, current_app
+    Blueprint, flash, g, redirect, request, session, url_for, jsonify, current_app as app
 )
 from werkzeug.exceptions import abort
+
 
 #################################################
 # Initialize the text embedding model
 #################################################
 
-from ...library.document_embedding import TextEmbedding
+from ...library.text_embedding import TextEmbedding
 
-# TODO initialize text embedding model
-model = TextEmbedding(language='en', model_path='./data/')
+# get model parameters
+model_path = app.config['MODEL_PATH']
+model_format = app.config['MODEL_FORMAT']
+language = app.config['MODEL_LANGUAGE']
+
+# initialize text embedding model
+model = TextEmbedding(language=language, model_path=model_path, model_format=model_format)
+
 
 #################################################
 # Setup the embeddings blueprint
@@ -34,13 +41,28 @@ def create():
     # assign the text placeholder
     text = None
     if request.method == 'GET':
-        # TODO retrieve the correct query parameters
+        # retrieve the correct query parameters
         text = request.args.get('text', default='', type=str)
     elif request.method == 'POST':
-        # TODO retrieve the document posted to the route
+        # retrieve the text posted to the route
         text = request.json['text']
     else:
+        # TODO: log exception
         return abort(405)
 
-    # TODO write the body of the route
-    return abort(501)
+    try:
+        # extract the text embedding
+        text_embedding = model.text_embedding(text)
+    except:
+        # get exception
+        e = sys.exc_info()[0]
+        # TODO: log exception
+        # something went wrong with the request
+        return abort(400)
+    else:
+        # return the embedding with the text
+        return jsonify({
+            "language": model.get_language(),
+            "tokens": model.tokenize(text),
+            "embedding": text_embedding
+        })

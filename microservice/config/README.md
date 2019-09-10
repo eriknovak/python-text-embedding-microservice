@@ -32,6 +32,12 @@ PROD_SESSION_KEY=session-key
 # session secret
 DEV_SESSION_KEY=session-key
 
+# parameters used only for development
+# in production this should be set as a parameter
+DEV_MODEL_PATH=./data/embeddings/name.of.the.model.vec
+DEV_MODEL_FORMAT=word2vec
+DEV_MODEL_LANGUAGE={ISO 693-1 code of language}
+
 #######################################
 ### Test variables
 #######################################
