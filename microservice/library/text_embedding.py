@@ -84,7 +84,7 @@ class TextEmbedding:
             return []
 
         # retrieve stopwords based on the language
-        with open(fname) as f:
+        with open(fname, 'r', encoding='utf-8') as f:
             stopwords = f.readlines()
 
         # strip the stopwords of any access whitespaces

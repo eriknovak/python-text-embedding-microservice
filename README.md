@@ -85,11 +85,7 @@ To run the service in production mode, one must first change some parameters.
 #### Linux and Mac
 
 ```bash
-export FLASK_ENV=production
-```
-
-```bash
-python -m microservice.execute production \
+python -m microservice.execute start \
     -H localhost \
     -p 4001 \
     -mp ./data/embeddings/wiki.en.align.vec \
@@ -98,24 +94,11 @@ python -m microservice.execute production \
 
 #### Windows
 
-For Windows cmd, use `set` instead of `export`:
-
-```cmd
-set FLASK_ENV=production
-```
-
-For Windows PowerShell, use `$env:` instead of `export`:
-
-```PowerShell
-$env:FLASK_ENV="production"
-```
-
 Afterwards run the following command from the root of the project. The parameters
 can be changed.
 
-
 ```cmd
-python -m microservice.execute production -H localhost -p 4001 -mp ./data/embeddings/wiki.en.align.vec -ml en
+python -m microservice.execute start -H localhost -p 4001 -mp ./data/embeddings/wiki.en.align.vec -ml en
 ```
 
 ### Running different services

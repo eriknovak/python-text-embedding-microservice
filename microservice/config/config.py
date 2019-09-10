@@ -18,11 +18,13 @@ class Config(object):
 
 class ProductionConfig(Config):
     """Production configuration"""
+    ENV='production'
     SECRET_KEY=os.getenv('PROD_SECRET_KEY')
 
 
 class DevelopmentConfig(Config):
     """Development configuration"""
+    ENV='development'
     DEBUG = True
     SECRET_KEY=os.getenv('DEV_SECRET_KEY')
     # the model parameters
@@ -33,5 +35,6 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     """Testing configuration"""
+    ENV='testing'
     TESTING = True
     SECRET_KEY=os.getenv('TEST_SECRET_KEY')

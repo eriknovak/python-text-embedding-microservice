@@ -21,16 +21,21 @@ def create_app(args=None):
             MODEL_LANGUAGE=args.model_language
         )
 
+    # set the service environment
+    SERVICE_ENV = args.env if args else 'development'
+
     # setup the app configuration
-    if os.getenv('FLASK_ENV') == 'production':
+    if SERVICE_ENV == 'production':
         app.config.from_object(config.ProductionConfig)
-    elif os.getenv('FLASK_ENV') == 'development':
+    elif SERVICE_ENV == 'development':
         app.config.from_object(config.DevelopmentConfig)
-    elif os.getenv('FLASK_ENV') == 'testing':
+    elif SERVICE_ENV == 'testing':
         app.config.from_object(config.TestingConfig)
 
+    print(app.config)
+
     # setup the cors configurations
-    if 'CORS' in app.config and 'origins' in app.config['CORS']:
+    if app.config['CORS']['origins']:
         CORS(app, origins=app.config['CORS']['origins'])
 
     # add error handlers
