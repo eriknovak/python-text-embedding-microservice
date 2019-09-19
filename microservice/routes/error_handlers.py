@@ -10,11 +10,13 @@ def register(app):
     @app.errorhandler(400)
     def bad_request(e):
         # TODO: possible webpage for error
+        print(e)
         return jsonify({
             "error": {
                 "message": "400: Bad request",
                 "route": request.path,
-                "method": request.method
+                "method": request.method,
+                "error": e.description,
             }
         })
 
@@ -25,7 +27,8 @@ def register(app):
             "error": {
                 "message": "404: Route not found",
                 "route": request.path,
-                "method": request.method
+                "method": request.method,
+                "error": e.description,
             }
         })
 
@@ -36,7 +39,8 @@ def register(app):
             "error": {
                 "message": "405: Method not allowed",
                 "route": request.path,
-                "method": request.method
+                "method": request.method,
+                "error": e.description,
             }
         })
 
@@ -47,6 +51,7 @@ def register(app):
             "error": {
                 "message": "501: Not implemented",
                 "route": request.path,
-                "method": request.method
+                "method": request.method,
+                "error": e.description,
             }
         })

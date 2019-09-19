@@ -1,10 +1,26 @@
+###########################################################
+# Text Embedding Model
+# The model creates text embedding in two ways:
+# 1. Averaging the word embeddings in the text
+# 2. First do the (1) approach and then remove the most
+#    common information with the calculated projection
+#    matrix (link: https://openreview.net/pdf?id=SyK00v5xx)
+
 # for directory creation
 import os
 
+# for model loading
+import pickle
+
+# used for model loading and processing text
 from gensim.models import KeyedVectors, FastText
 from gensim.parsing.preprocessing import preprocess_string, strip_punctuation
-
 from langdetect import detect
+
+# used for calculating the projection matrix
+from sklearn.decomposition import PCA
+
+# utility libraries
 import numpy as np
 import operator
 
@@ -24,15 +40,17 @@ class TextEmbedding:
         self.__language = language
         self.__embedding = None
         self.__model = None
+        # projection matrix used for
+        self.__projection_matrix = None
 
         if not model_path == None:
             if os.path.isfile(model_path):
-                self.load_model(model_path, model_format)
+                self.__load_model(model_path, model_format)
         else:
             raise Exception("TextEmbedding.__init__: model_path does not exist {}".format(model_path))
 
 
-    def load_model(self, model_path, model_format):
+    def __load_model(self, model_path, model_format):
         """Loads the word embedding model
 
         Args:
@@ -52,8 +70,12 @@ class TextEmbedding:
             self.__embedding = self.__model.load(model_path)
             self.__stopwords = self.stopwords()
         else:
-            raise Exception("Model '{}' not supported (must be 'word2vec' or 'fastfext').".format(model_format) +
+            raise Exception("TextEmbedding.__load_model: Model '{}' not supported (must be 'word2vec' or 'fastfext').".format(model_format) +
                             " Cannot load word embedding model.")
+
+        # calculate the default projection matrix
+        v = np.zeros(self.__embedding.vector_size, dtype=np.float32)
+        self.__projection_matrix = np.outer(v, v)
 
 
     def get_language(self):
@@ -124,7 +146,7 @@ class TextEmbedding:
         return terms_sorted
 
 
-    def text_embedding(self, text):
+    def text_embedding(self, text, language=None):
         """Create the text embedding
 
         Args:
@@ -136,10 +158,10 @@ class TextEmbedding:
         """
 
         # check if the provided text is the one the embedding can perform
-        language = detect(text)
-        if not language == self.__language:
+        text_language = language if language != None else detect(text)
+        if not text_language == self.__language:
             # raise an exeption of not matching languages
-            raise Exception("The provided text is not valid. Text language ({}) != {}".format(language, self.__language))
+            raise Exception("The provided text is not valid. Text language ({}) != {}".format(text_language, self.__language))
 
         # prepare the embedding placeholder
         embedding = np.zeros(self.__embedding.vector_size, dtype=np.float32)
@@ -158,7 +180,63 @@ class TextEmbedding:
                 embedding += self.__embedding[token] * number_of_appearances
                 count += number_of_appearances
 
-        # average the embedding if not zero
-        __text_embedding = embedding if count == 0 else embedding / count
+        if count == 0:
+            # return the empty embedding list
+            return embedding.tolist()
+
+        # average the embedding
+        __text_embedding = embedding / count
+
+        # (2) remove the projection on the first singular vector
+        __text_embedding = __text_embedding - self.__projection_matrix.dot(__text_embedding)
+
         # return the embedding in vanilla python object
         return __text_embedding.tolist()
+
+
+    def __train_projection_matrix(self, matrix):
+        """Trains the PCA for retrieving the first singular vector and
+        generating the projection matrix.
+
+        Args:
+            matrix (list(list(float))): The matrix of text embeddings.
+
+        """
+
+        # set the PCA parameters and fit the model
+        pca = PCA(n_components=1)
+        pca.fit(matrix)
+        # get the first singular vector and get the projection matrix
+        sv = pca.components_[0]
+        self.__projection_matrix = np.outer(sv, sv)
+
+
+    def save_projection_matrix(self, path):
+        """Saves the projection matrix
+
+        Args:
+            path (str): The path where the matrix will be stored.
+
+        """
+
+        with open(path, 'wb') as output:
+            pickle.dump(self.__projection_matrix, output, pickle.HIGHEST_PROTOCOL)
+
+
+
+
+    def load_projection_matrix(self, path):
+        """Loads the projection matrix
+
+        Args:
+            path (str): The path where the matrix is located.
+
+        """
+
+        if not path == None:
+            if os.path.isfile(path):
+                with open(path, 'rb') as input:
+                    self.__projection_matrix = pickle.load(input)
+        else:
+            raise Exception("TextEmbedding.load_projection_matrix: path does not exist {}".format(path))
+
