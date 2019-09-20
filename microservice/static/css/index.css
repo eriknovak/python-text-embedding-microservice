@@ -135,3 +135,7 @@ footer {
 .table-dashed-borders tbody tr.no-top-border > td {
     border-top: 0px solid;
 }
+
+.clickable-row {
+    cursor: pointer;
+}
