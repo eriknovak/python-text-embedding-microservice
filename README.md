@@ -53,8 +53,8 @@ and restarts the server whenever you make changes to the code.
 One can leave it running and just reload the browser page as one does changes to the service.
 
 #### Prerequisites
-Check the [configuration](./microservice/config/) folder to see what needs to be set before running the microservice
-in development mode.
+Check the [configuration](./microservice/config/) folder to see what needs to be set before running
+the microservice in development mode.
 
 
 To run the service:
@@ -78,11 +78,12 @@ Visit `http://localhost:5000/` (or `http://127.0.0.1:5000/`) in a browser to see
 application.
 
 
-### Running the Service in Production Mode
+#### Alternatives
 
-To run the service in production mode, one must first change some parameters.
+To give more control, the user can provide additional parameters to the service. What follows are
+instructions on how to run the service in development mode with additional parameters.
 
-#### Linux and Mac
+##### Linux and Mac
 
 ```bash
 python -m microservice.execute start \
@@ -92,7 +93,7 @@ python -m microservice.execute start \
     -ml en
 ```
 
-#### Windows
+##### Windows
 
 Afterwards run the following command from the root of the project. The parameters
 can be changed.
@@ -105,3 +106,56 @@ python -m microservice.execute start -H localhost -p 4001 -mp ./data/embeddings/
 
 To run the same service on different models just change the `-p`, `-mp` and `-ml`
 command line parameters and run the code.
+
+
+### Running the service in Production Mode
+
+Running the flask application in production mode requires some additional libraries.
+
+#### Linux and Mac
+
+To run the flask application in production, checkout this [article](https://medium.com/@thucnc/deploy-a-python-flask-restful-api-app-with-gunicorn-supervisor-and-nginx-62b20d62691f) for
+guidelines.
+
+##### Gunicorn
+[Gunicorn](https://gunicorn.org/) is a Python WSGI HTTP Server for UNIX. It is quite easy to install
+and use.
+
+1. Install gunicorn
+
+    ```bash
+    pip install gunicorn
+    ```
+
+2. Run the flask application with gunicorn
+
+    ```bash
+    gunicorn -w 4 -b 127.0.0.1:4000 microservice:execute
+    ```
+
+##### Supervisor: A Process Control System
+
+[Supervisor](http://supervisord.org/) is a client/server system that allows its users to monitor
+and control a number of processes on a UNIX-like operating systems.
+
+1. Install supervisor
+    ```bash
+    pip install supervisor
+    ```
+
+
+
+#### Windows
+
+**NOTE: If possible, run the service on a UNIX machine because it is easier.**
+
+For windows running the flask service is a little more complicated. There are two approaches:
+
+- Using apache + [mod_wsgi](https://pypi.org/project/mod-wsgi/)
+- Installing a linux Virtual Machine (e.g. virtualbox) on the windows machine to host the application
+   and proxy the requests from local IIS to the virtual system
+
+
+
+
+
