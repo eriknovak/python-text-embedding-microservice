@@ -110,7 +110,7 @@ instructions on how to run the service in development mode with additional param
 | -e or --env             | The service environment. Options: 'production', 'development', 'testing' (Default: 'production')                                |
 | -mp or --model_path     | The language model path (e.g. './data/embeddings/{insert.name.of.word.model}')                                                  |
 | -mf or --model_format   | The language model type (see [Gensim](https://radimrehurek.com/gensim/)). Options: 'word2vec', 'fasttext' (Default: 'word2vec') |
-| -ml or --model_language | The ISO 396-1 code of the language model (e.g. 'en' for English)                                                                |
+| -ml or --model_language | The ISO 693-1 code of the language model (e.g. 'en' for English)                                                                |
 
 
 ##### Linux and Mac
