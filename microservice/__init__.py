@@ -15,16 +15,17 @@ def create_app(args=None):
 
     # add user provided configurations for the
     if args:
+        print(args)
         app.config.update(
-            MODEL_PATH=args.model_path,
-            MODEL_FORMAT=args.model_format,
-            MODEL_LANGUAGE=args.model_language,
-            HOST=args.host,
-            PORT=args.port,
+            MODEL_PATH=args["model_path"],
+            MODEL_FORMAT=args["model_format"] if 'model_format' in args else 'word2vec',
+            MODEL_LANGUAGE=args["model_language"],
+            HOST=args["host"],
+            PORT=args["port"],
         )
 
     # set the service environment
-    SERVICE_ENV = args.env if args else 'development'
+    SERVICE_ENV = args["env"] if args else 'development'
 
     # setup the app configuration
     if SERVICE_ENV == 'production':

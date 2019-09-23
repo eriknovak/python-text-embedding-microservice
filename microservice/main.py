@@ -22,10 +22,20 @@ if __name__=='__main__':
     args = argparser.parse_args()
 
     if args.command == 'start':
+
+        arguments = {
+            "host": args.host,
+            "port": args.port,
+            "env": args.env,
+            "model_path": args.model_path,
+            "model_format": args.model_format,
+            "model_language": args.model_language
+        }
+
         # create the application
-        app = create_app(args=args)
+        app = create_app(args=arguments)
         # run the application
-        app.run(host=args.host, port=args.port)
+        app.run(host=arguments["host"], port=arguments["port"])
 
     else:
         raise Exception('Argument command is unknown: {}'.format(args.command))
