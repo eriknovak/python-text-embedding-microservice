@@ -9,14 +9,32 @@ Service for producing document representations via word embeddings.
 
     To test that your python version is correct, run `python --version` in the command line
 
+
+## Create an Environment and activate it
+
+First create the virtual environment where the service will store all the modules.
+
+```bash
+pip install virtualenv
+virtualenv -p python3 ./.venv
+# on windows activate the environment
+./.venv/Scripts/activate
+```
+
+### Deactivating the environment
+
+To deactivate the environment simply execute
+
+```bash
+deactivate
+```
+
 ## Install
 
 To install the project run
 
 ```bash
 pip install -r requirements.txt
-# if using conda
-conda install --file requirements.txt
 ```
 
 ## Starting Microservice
@@ -99,10 +117,10 @@ Afterwards run the following command from the root of the project. The parameter
 can be changed.
 
 ```cmd
-python -m microservice.execute start -H localhost -p 4001 -mp ./data/embeddings/wiki.en.align.vec -ml en
+python -m microservice.execute start -H localhost -p 4000 -mp ./data/embeddings/wiki.sl.align.vec -ml sl
 ```
 
-### Running different services
+#### Running different services
 
 To run the same service on different models just change the `-p`, `-mp` and `-ml`
 command line parameters and run the code.
