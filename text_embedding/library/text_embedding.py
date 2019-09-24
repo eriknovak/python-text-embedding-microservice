@@ -67,10 +67,10 @@ class TextEmbedding:
         elif model_format == 'fasttext':
             # load the model with the fasttext format
             self.__model = FastText
-            self.__embedding = self.__model.load(model_path)
+            self.__embedding = self.__model.load_fasttext_format(model_path)
             self.__stopwords = self.stopwords()
         else:
-            raise Exception("TextEmbedding.__load_model: Model '{}' not supported (must be 'word2vec' or 'fastfext').".format(model_format) +
+            raise Exception("TextEmbedding.__load_model: Model '{}' not supported (must be 'word2vec' or 'fasttext').".format(model_format) +
                             " Cannot load word embedding model.")
 
         # calculate the default projection matrix
@@ -239,4 +239,3 @@ class TextEmbedding:
                     self.__projection_matrix = pickle.load(input)
         else:
             raise Exception("TextEmbedding.load_projection_matrix: path does not exist {}".format(path))
-

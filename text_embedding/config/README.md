@@ -6,15 +6,19 @@ This folder contains the configuration files.
 
 To avoid storing vulnerable data in the repository (such as tokens
 and secrets) we have adopted the `.env` approach to feed the vulnerable data to
-different components of the microservice.
+different components of the microservice. It uses the [12-factor](https://12factor.net/)
+principles.
 
-This approach requires the `python-dotenv` module (which is installed by running
-the `pip install python-dotenv` command) and an `.env` file saved in this folder.
-One must create the `.env` file by hand since it is ignored in the project.
+This approach requires the [python-dotenv](https://pypi.org/project/python-dotenv/)
+module (which is installed by running the `pip install python-dotenv` command)
+and an `.env` file saved in this folder. One must create the `.env` file by hand
+since it is ignored in the project.
 
 ### .env
 What follows is an example of the `.env` file. To get the right configs contact
 one of the developers contributing to this project.
+
+The parameters that can be set in this file can be found [here](../../README.md#Alternatives).
 
 
 ```bash
@@ -33,7 +37,7 @@ PROD_SESSION_KEY=session-key
 DEV_SESSION_KEY=session-key
 
 # parameters used only for development
-# in production this should be set as a parameter
+# in production this should be set as a script parameter, not environmental variables
 DEV_MODEL_PATH=./data/embeddings/name.of.the.model.vec
 DEV_MODEL_FORMAT=word2vec
 DEV_MODEL_LANGUAGE={ISO 693-1 code of language}

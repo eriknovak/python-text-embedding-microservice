@@ -59,10 +59,9 @@ def create():
     except:
         # get exception
         e = sys.exc_info()[0]
-        print(str(e))
         # TODO: log exception
         # something went wrong with the request
-        return abort(400, message=str(e))
+        return abort(400)
     else:
         # return the embedding with the text
         return jsonify({
