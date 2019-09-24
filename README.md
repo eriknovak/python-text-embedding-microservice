@@ -213,13 +213,18 @@ and control a number of processes on a UNIX-like operating systems.
     ```
     At this point the services should already run. To stop and start the services use the following two commands:
     ```bash
-    sudo supervisorctl stop text_embedding_sl  # stop the service called 'text_embedding_sl'
+    sudo supervisorctl stop text_embedding_sl # stop the service called 'text_embedding_sl'
     sudo supervisorctl start text_embedding_sl # start the service called 'text_embedding_sl'
     ```
     To start and stop all services run the following commands:
     ```bash
     sudo supervisorctl stop all  # stop all services
     sudo supervisorctl start all # start all services
+    ```
+
+4. (optional) Check that the services are running and on which ports with the following command:
+    ```bash
+    sudo lsof -i -P -n | grep LISTEN
     ```
 
 To run multiple services with different models/parameters modify the `/etc/supervisor/conf.d/text_embeddings.conf` file:

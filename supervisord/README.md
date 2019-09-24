@@ -9,7 +9,7 @@ The scripts that create the supervisor configuration file all ready from a singl
 file - the `supervisor_config.json` file. This file has the following structure:
 
 
-```json
+```js
 {
   "text_embedding": {
     "{ISO 693-1 code language}": {
@@ -27,7 +27,7 @@ file - the `supervisor_config.json` file. This file has the following structure:
 ```
 
 An example of such file is presented bellow:
-```json
+```js
 {
   "text_embedding": {
     "en": {
