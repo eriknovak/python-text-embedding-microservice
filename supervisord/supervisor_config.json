@@ -1,0 +1,46 @@
+{
+  "text_embedding": {
+    "en": {
+      "program": "text_embedding_en",
+      "model_path": "./data/embeddings/wiki.en.align.vec",
+      "model_format": "word2vec",
+      "port": 4000
+    },
+    "sl": {
+      "program": "text_embedding_sl",
+      "model_path": "./data/embeddings/wiki.sl.align.vec",
+      "model_format": "word2vec",
+      "port": 4001
+    },
+    "de": {
+      "program": "text_embedding_de",
+      "model_path": "./data/embeddings/wiki.de.align.vec",
+      "model_format": "word2vec",
+      "port": 4002
+    },
+    "ca": {
+      "program": "text_embedding_ca",
+      "model_path": "./data/embeddings/wiki.ca.align.vec",
+      "model_format": "word2vec",
+      "port": 4003
+    },
+    "es": {
+      "program": "text_embedding_es",
+      "model_path": "./data/embeddings/wiki.es.align.vec",
+      "model_format": "word2vec",
+      "port": 4004
+    },
+    "fr": {
+      "program": "text_embedding_fr",
+      "model_path": "./data/embeddings/wiki.fr.align.vec",
+      "model_format": "word2vec",
+      "port": 4005
+    },
+    "it": {
+      "program": "text_embedding_it",
+      "model_path": "./data/embeddings/wiki.it .align.vec",
+      "model_format": "word2vec",
+      "port": 4006
+    }
+  }
+}
