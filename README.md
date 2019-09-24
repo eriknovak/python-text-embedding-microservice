@@ -276,14 +276,14 @@ The interface service has the following script parameters.
 ```bash
 python -m interface.main start \
     -H localhost \
-    -p 6000 \
+    -p 4200 \
     -pr en=4000,sl=4001
 ```
 
 ##### Windows
 
 ```cmd
-python -m interface.main start -H localhost -p 6000 -pr en=4000,sl=4001
+python -m interface.main start -H localhost -p 4200 -pr en=4000,sl=4001
 ```
 
 ### Running the interface in Production
@@ -295,9 +295,9 @@ with gunicorn and supervisor. **Note:** Again, these instructions are for Linux 
 
 ```bash
     # proxy is user defined
-    gunicorn -w 1 -b 127.0.0.1:6000 'interface:create_app(args={ "host":"127.0.0.1", "port":6000, "env":"production", "proxy": { "en": 4000, "sl": 4001 } })'
+    gunicorn -w 1 -b 127.0.0.1:4200 'interface:create_app(args={ "host":"127.0.0.1", "port":4200, "env":"production", "proxy": { "en": 4000, "sl": 4001 } })'
     # proxy is extracted from the supervisord configuration
-    gunicorn -w 1 -b 127.0.0.1:6000 'interface:create_app(args={ "host":"127.0.0.1", "port":6000, "env":"production", "supervisord": True })'
+    gunicorn -w 1 -b 127.0.0.1:4200 'interface:create_app(args={ "host":"127.0.0.1", "port":4200, "env":"production", "supervisord": True })'
 ```
 
 #### Supervisor
@@ -310,7 +310,7 @@ Add the following code block to the `/etc/supervisor/conf.d/text_embeddings.conf
 [program:text_embedding_interface]
 user = {name-of-the-user}
 directory = /path/to/document-embedding-service
-command = sh ./scripts/environment.sh gunicorn -w 1 -b 127.0.0.1:6000 -c ./scripts/gunicorn.conf.py 'interface:create_app(args={ "host":"127.0.0.1", "port":6000, "env":"production", "supervisord": True })'
+command = sh ./scripts/environment.sh gunicorn -w 1 -b 127.0.0.1:4200 -c ./scripts/gunicorn.conf.py 'interface:create_app(args={ "host":"127.0.0.1", "port":4200, "env":"production", "supervisord": True })'
 
 priority = 900
 autostart = true
