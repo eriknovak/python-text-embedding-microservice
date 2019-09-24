@@ -25,12 +25,12 @@ def __create_folder_dir(path):
         os.makedirs(directory)
 
 
-def configure_timed_rotating_log(path, name="microservice"):
+def configure_timed_rotating_log(path, name="interface"):
     """Configures the logging
 
     Args:
         path (str): The path to the log file.
-        name (str): The name of the logger. (Default = "microservice")
+        name (str): The name of the logger. (Default = "intefrace")
 
     Returns:
         obj: the logger object.

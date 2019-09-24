@@ -5,7 +5,7 @@ Service for producing text representations via word embeddings.
 
 - Create `.env` file in `text_embedding/config` folder. See instruction described [here](./text_embedding/config/).
 
-- Python 3.* or higher (we recommend using Conda and creation of a separate enviroment for this project)
+- Python 3.* or higher (we will use [virtualenv](https://virtualenv.pypa.io/en/stable/) to create a separate enviroment for this project)
 
     To test that your python version is correct, run `python --version` in the command line
 
@@ -109,7 +109,7 @@ instructions on how to run the service in development mode with additional param
 | -p or --port            | The service port (Default: 4000)                                                                                                |
 | -e or --env             | The service environment. Options: 'production', 'development', 'testing' (Default: 'production')                                |
 | -mp or --model_path     | The language model path (e.g. './data/embeddings/{insert.name.of.word.model}')                                                  |
-| -mf or --model_format   | The language model type (see [Gensim](https://radimrehurek.com/gensim/)). Options: 'word2vec', 'fasttext' (Default: 'word2vec') |
+| -mf or --model_format   | The language model type (see [Gensim](https://radimrehurek.com/gensim/)). Options: 'word2vec' (for .vec files), 'fasttext' (for .bin files) (Default: 'word2vec') |
 | -ml or --model_language | The ISO 693-1 code of the language model (e.g. 'en' for English)                                                                |
 
 
@@ -124,9 +124,6 @@ python -m text_embedding.main start \
 ```
 
 ##### Windows
-
-Afterwards run the following command from the root of the project. The parameters
-can be changed.
 
 ```cmd
 python -m text_embedding.main start -H localhost -p 4000 -mp ./data/embeddings/wiki.sl.align.vec -ml sl
@@ -168,7 +165,7 @@ It is quite easy to install and use.
     An example of running the service with aligned Slovene language model from fasttext. **Note:** The address and port are the same in `-b` and the `create_app` value.
 
     ```bash
-    gunicorn -w 4 -b 127.0.0.1:4000 'text_embedding:create_app(args={ "host":"127.0.0.1", "port":4000, "env":"production", "model_path":"./data/embeddings/wiki.sl.align.vec", "model_language":"sl", "model_format":"word2vec" })'
+    gunicorn -w 1 -b 127.0.0.1:4000 'text_embedding:create_app(args={ "host":"127.0.0.1", "port":4000, "env":"production", "model_path":"./data/embeddings/wiki.sl.align.vec", "model_language":"sl", "model_format":"word2vec" })'
     ```
 
 This is enough to support running the services in production, but to run multiple services at once the user
@@ -254,6 +251,81 @@ For windows running the flask service is a little more complicated. There are tw
 - Using apache + [mod_wsgi](https://pypi.org/project/mod-wsgi/)
 - Installing a linux Virtual Machine (e.g. virtualbox) on the windows machine to host the application
    and proxy the requests from local IIS to the virtual system
+
+
+## Text Embedding Interface
+
+The [interface](./interface) folder contains all information for running an interface service for
+the text embeddings.
+
+The interface enables to have a single endpoint for retrieving text embeddings in multiple languages.
+Doing so, the user does not need to have everything stored in the application.
+
+The interface service has the following script parameters.
+
+| Parameter               | Description                                                                                                                                    |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| -H or --host            | The service host address (Default: '127.0.0.1')                                                                                                |
+| -p or --port            | The service port (Default: 4000)                                                                                                               |
+| -e or --env             | The service environment. Options: 'production', 'development', 'testing' (Default: 'production')                                               |
+| -pr or --proxy          | The proxy configuration. Tells which language service is found at which port (e.g. en=4000,sl=4001)                                            |
+| --supervisord           | Extract the proxy configuration from the [supervisord_config.json](./supervisord/supervisor_config.json) file. Overrides the --proxy parameter |
+
+##### Linux and Mac
+
+```bash
+python -m interface.main start \
+    -H localhost \
+    -p 6000 \
+    -pr en=4000,sl=4001
+```
+
+##### Windows
+
+```cmd
+python -m interface.main start -H localhost -p 6000 -pr en=4000,sl=4001
+```
+
+### Running the interface in Production
+
+Similarly to the `text_embedding` services, the `interface` service can be run in production mode
+with gunicorn and supervisor. **Note:** Again, these instructions are for Linux and Mac only.
+
+#### Gunicorn
+
+```bash
+    # proxy is user defined
+    gunicorn -w 1 -b 127.0.0.1:6000 'interface:create_app(args={ "host":"127.0.0.1", "port":6000, "env":"production", "proxy": { "en": 4000, "sl": 4001 } })'
+    # proxy is extracted from the supervisord configuration
+    gunicorn -w 1 -b 127.0.0.1:6000 'interface:create_app(args={ "host":"127.0.0.1", "port":6000, "env":"production", "supervisord": True })'
+```
+
+#### Supervisor
+
+Add the following code block to the `/etc/supervisor/conf.d/text_embeddings.conf` file.
+
+```vim
+;/etc/supervisor/conf.d/text_embeddings.conf
+
+[program:text_embedding_interface]
+user = {name-of-the-user}
+directory = /path/to/document-embedding-service
+command = sh ./scripts/environment.sh gunicorn -w 1 -b 127.0.0.1:6000 -c ./scripts/gunicorn.conf.py 'interface:create_app(args={ "host":"127.0.0.1", "port":6000, "env":"production", "supervisord": True })'
+
+priority = 900
+autostart = true
+autorestart = true
+stopsignal = TERM
+
+redirect_stderr = true
+stdout_logfile = /path/to/document-embedding-service/log/%(program_name)s.log
+stderr_logfile = /path/to/document-embedding-service/log/%(program_name)s.log
+```
+
+###### Automatic Supervisor file creation
+
+Similarly as before, the interface supervisor configurations can be automatically created by adding an
+additional parameter to the script found in the [supervisord](./supervisord) folder.
 
 
 # Acknowledgments
