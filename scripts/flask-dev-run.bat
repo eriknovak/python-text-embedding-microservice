@@ -13,7 +13,7 @@ if "%FLASK_ENV%"=="" (
 )
 
 :: set the flask environment variables
-set FLASK_APP=microservice
+set FLASK_APP=text_embedding
 
 cd ..
 :: run the flask app (with autoreload)

@@ -12,7 +12,7 @@ if ("$FLASK_ENV" -eq "") {
 }
 
 # set the flask environment variables
-$env:FLASK_APP="microservice"
+$env:FLASK_APP="text_embedding"
 $env:FLASK_ENV="$FLASK_ENV"
 
 Set-Location ../

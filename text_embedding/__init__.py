@@ -15,7 +15,6 @@ def create_app(args=None):
 
     # add user provided configurations for the
     if args:
-        print(args)
         app.config.update(
             MODEL_PATH=args["model_path"],
             MODEL_FORMAT=args["model_format"] if 'model_format' in args else 'word2vec',

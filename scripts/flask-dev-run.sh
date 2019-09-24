@@ -13,7 +13,7 @@ if [$FLASK_ENV -eq ""]; then
 fi
 
 # set the flask environment variables
-export FLASK_APP=microservice
+export FLASK_APP=text_embedding
 export FLASK_ENV=$FLASK_ENV
 
 cd ..

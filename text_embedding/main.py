@@ -1,5 +1,5 @@
 import argparse
-from microservice import create_app
+from text_embedding import create_app
 
 if __name__=='__main__':
     # parse command line arguments
@@ -8,7 +8,7 @@ if __name__=='__main__':
 
     argparser_production = subparsers.add_parser('start', help="Runs the service in the production environment")
 
-    # the host and port of the microservice
+    # the host and port of the text embedding microservice
     argparser_production.add_argument('-H', '--host', type=str, default='127.0.0.1', help="The host of the microservice")
     argparser_production.add_argument('-p', '--port', type=str, default='4000', help="The port of the microservice")
     argparser_production.add_argument('-e', '--env', type=str, default='production', help="The microservice environment")
@@ -22,7 +22,7 @@ if __name__=='__main__':
     args = argparser.parse_args()
 
     if args.command == 'start':
-
+        # get the arguments for creating the app
         arguments = {
             "host": args.host,
             "port": args.port,
@@ -31,7 +31,6 @@ if __name__=='__main__':
             "model_format": args.model_format,
             "model_language": args.model_language
         }
-
         # create the application
         app = create_app(args=arguments)
         # run the application

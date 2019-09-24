@@ -108,3 +108,5 @@ virtual/
 
 data/**/*.vec
 log/
+
+supervisord/*.conf

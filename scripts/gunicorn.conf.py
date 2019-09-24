@@ -2,7 +2,6 @@
 # coding=utf-8
 # Reference: https://github.com/benoitc/gunicorn/blob/master/examples/example_config.py
 import os
-import multiprocessing
 
 _ROOT = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..'))
