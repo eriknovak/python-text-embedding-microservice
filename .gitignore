@@ -107,6 +107,7 @@ virtual/
 .vscode/
 
 data/**/*.vec
+data/**/*.bin
 log/
 
 supervisord/*.conf

@@ -56,12 +56,11 @@ def create():
     try:
         # extract the text embedding
         text_embedding = model.text_embedding(text, language)
-    except:
+    except Exception as e:
         # get exception
-        e = sys.exc_info()[0]
         # TODO: log exception
         # something went wrong with the request
-        return abort(400)
+        return abort(400, str(e))
     else:
         # return the embedding with the text
         return jsonify({

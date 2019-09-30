@@ -161,7 +161,7 @@ class TextEmbedding:
         text_language = language if language != None else detect(text)
         if not text_language == self.__language:
             # raise an exeption of not matching languages
-            raise Exception("The provided text is not valid. Text language ({}) != {}".format(text_language, self.__language))
+            raise Exception("The provided text is not valid: {}. Supported language: {}".format(text_language, self.__language))
 
         # prepare the embedding placeholder
         embedding = np.zeros(self.__embedding.vector_size, dtype=np.float32)
